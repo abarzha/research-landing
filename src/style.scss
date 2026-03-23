@@ -1,0 +1,338 @@
+/* ─── Reset & base ─────────────────────────────────── */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-display: 'Space Grotesk', var(--font-sans);
+  --glass-bg: rgba(10, 10, 20, 0.25);
+  --glass-border: rgba(255, 255, 255, 0.10);
+  --accent: #7eb8ff;
+  --accent2: #b47cff;
+  --text-primary: rgba(255, 255, 255, 0.92);
+  --text-secondary: rgba(255, 255, 255, 0.55);
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background: #000;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ─── Wave canvas (fixed full-screen background) ───── */
+#canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  cursor: crosshair;
+
+  &.loaded {
+    opacity: 1;
+  }
+
+  canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+/* ─── Mouse follower ring ───────────────────────────── */
+#mouse-ring {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid rgba(126, 184, 255, 0.55);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 10;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s ease, width 0.15s ease, height 0.15s ease;
+  opacity: 0;
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
+/* ─── Page layout ───────────────────────────────────── */
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 clamp(1.5rem, 5vw, 4rem);
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
+/* ─── Hero ──────────────────────────────────────────── */
+.hero {
+  min-height: 52vh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 3.5rem;
+}
+
+.hero-text {
+  /* No CSS animation — anime.js handles entrance */
+  transition: filter 0.15s ease;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+  opacity: 0; /* anime.js will reveal */
+}
+
+/* ─── Title with letter-by-letter animation ────────── */
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6rem;
+  position: relative;
+  perspective: 1000px;
+
+  /* Individual letter spans — gradient applied per-letter in JS */
+  .letter {
+    display: inline-block;
+    opacity: 0; /* anime.js will reveal */
+    transform-origin: center bottom;
+    will-change: transform, opacity;
+  }
+
+  /* Bloom glow behind the title — driven by --title-glow from JS */
+  &::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    background: linear-gradient(135deg, #ffffff 30%, var(--accent) 70%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: blur(28px);
+    opacity: calc(var(--title-glow, 0) * 0.8);
+    pointer-events: none;
+    transition: opacity 0.1s ease;
+  }
+}
+
+/* ─── Subtitle with typing effect ──────────────────── */
+.hero-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text-secondary);
+  font-weight: 300;
+  margin-bottom: 1.2rem;
+  min-height: 1.6em; /* prevent layout shift during typing */
+
+  .sub-letter {
+    opacity: 0; /* anime.js will reveal via typing */
+  }
+}
+
+.typing-cursor {
+  color: var(--accent);
+  font-weight: 300;
+  animation: blink 0.6s steps(1) infinite;
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+.hero-hint {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.30);
+  font-style: italic;
+  letter-spacing: 0.04em;
+  opacity: 0; /* anime.js will reveal */
+  transition: opacity 1.2s ease;
+
+  &.faded {
+    opacity: 0 !important;
+  }
+}
+
+/* ─── Scroll indicator ─────────────────────────────── */
+.scroll-indicator {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  color: rgba(255, 255, 255, 0.35);
+  opacity: 0; /* anime.js will reveal */
+  animation: scrollBounce 2.4s ease-in-out infinite;
+  transition: opacity 0.3s ease;
+
+  svg {
+    display: inline-block;
+  }
+}
+
+@keyframes scrollBounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(10px); }
+}
+
+/* ─── Projects section ──────────────────────────────── */
+.projects-section {
+  flex: 1;
+  padding-bottom: 5rem;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: 1.8rem;
+  /* anime.js handles entrance (opacity set in JS) */
+}
+
+/* ─── Grid with 3D perspective for card tilt ─────────── */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 1.25rem;
+  perspective: 1200px;
+}
+
+/* ─── Glassmorphism cards ───────────────────────────── */
+.project-card {
+  /* No CSS animation — anime.js handles entrance with spring physics */
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  border-radius: 18px;
+  padding: 1.75rem 1.75rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  cursor: default;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition:
+    box-shadow 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease;
+}
+
+.card-tag {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  opacity: 0.8;
+}
+
+.project-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.project-card p {
+  font-size: 0.875rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  flex: 1;
+}
+
+.card-links {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.card-link {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid rgba(126, 184, 255, 0.25);
+  border-radius: 100px;
+  transition: background 0.2s ease, border-color 0.2s ease;
+
+  &:hover {
+    background: rgba(126, 184, 255, 0.12);
+    border-color: rgba(126, 184, 255, 0.5);
+  }
+}
+
+/* ─── Floating particles ───────────────────────────── */
+.particles-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+/* ─── Footer ────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 1.5rem 0 2rem;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.22);
+
+  a {
+    color: rgba(255, 255, 255, 0.38);
+    text-decoration: none;
+
+    &:hover {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: underline;
+    }
+  }
+}
+
+/* ─── Responsive tweaks ─────────────────────────────── */
+@media (max-width: 600px) {
+  .hero {
+    min-height: 45vh;
+    padding-bottom: 2.5rem;
+  }
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+}

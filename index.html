@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Andres Barrio — Research</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- Full-screen wave canvas background -->
+  <div id="canvas"></div>
+  <!-- Mouse follower ring -->
+  <div id="mouse-ring"></div>
+
+  <!-- Page content overlaid on top -->
+  <div class="page">
+
+    <!-- Hero / intro -->
+    <header class="hero">
+      <div class="hero-text">
+        <p class="hero-eyebrow">Research Portfolio</p>
+        <h1 data-text="Andres Barrio Zhang">Andres Barrio Zhang</h1>
+        <p class="hero-subtitle">
+          <!-- Update this with your title/affiliation -->
+          Researcher &amp; Engineer
+        </p>
+        <p class="hero-hint">Move your mouse to shape the waves</p>
+      </div>
+    </header>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" aria-hidden="true">
+      <svg width="24" height="14" viewBox="0 0 24 14" fill="none">
+        <path d="M2 2L12 12L22 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <!-- Research projects -->
+    <main class="projects-section">
+      <h2 class="section-title">Research Projects</h2>
+
+      <div class="projects-grid">
+
+        <article class="project-card">
+          <div class="card-tag">Project 1</div>
+          <h3>Wave Propagation &amp; Sensing</h3>
+          <p>
+            Exploring novel sensing methodologies using wave propagation phenomena
+            for precision measurement in complex media.
+          </p>
+          <div class="card-links">
+            <a href="#" class="card-link">Paper</a>
+            <a href="#" class="card-link">Code</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="card-tag">Project 2</div>
+          <h3>Computational Imaging</h3>
+          <p>
+            GPU-accelerated algorithms for reconstructing high-resolution images
+            from sparse or incomplete sensor data.
+          </p>
+          <div class="card-links">
+            <a href="#" class="card-link">Paper</a>
+            <a href="#" class="card-link">Demo</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="card-tag">Project 3</div>
+          <h3>Interactive Simulation</h3>
+          <p>
+            Real-time physically-based simulation of optical wave fields using
+            shader-based Wave Propagation Methods on the GPU.
+          </p>
+          <div class="card-links">
+            <a href="https://github.com/chiuhans111/interactwave" class="card-link">GitHub</a>
+            <a href="#" class="card-link">Live Demo</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="card-tag">Project 4</div>
+          <h3>Signal Processing</h3>
+          <p>
+            Novel FFT-based techniques for real-time spectral analysis and
+            filtering of multi-channel waveform data.
+          </p>
+          <div class="card-links">
+            <a href="#" class="card-link">Paper</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="card-tag">Project 5</div>
+          <h3>Human-Computer Interaction</h3>
+          <p>
+            Designing intuitive interfaces for scientific visualization,
+            bridging the gap between raw simulation data and human perception.
+          </p>
+          <div class="card-links">
+            <a href="#" class="card-link">Paper</a>
+            <a href="#" class="card-link">Demo</a>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <div class="card-tag">Project 6</div>
+          <h3>Machine Learning for Physics</h3>
+          <p>
+            Applying deep learning to accelerate the simulation of complex
+            physical systems and predict emergent wave phenomena.
+          </p>
+          <div class="card-links">
+            <a href="#" class="card-link">Paper</a>
+            <a href="#" class="card-link">Code</a>
+          </div>
+        </article>
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Built with the <a href="https://github.com/chiuhans111/interactwave" target="_blank">InteractWave</a> physics engine &mdash; shader-based wave propagation method.</p>
+    </footer>
+
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>
