@@ -26,11 +26,33 @@ function setupHeroLetters() {
     const text = title.textContent.trim()
     title.textContent = ''
 
-    text.split('').forEach(ch => {
-        const span = document.createElement('span')
-        span.className = 'letter'
-        span.textContent = ch === ' ' ? '\u00A0' : ch
-        title.appendChild(span)
+    // Split into words: first name on line 1, rest on line 2 (mobile only)
+    const words = text.split(' ')
+
+    words.forEach((word, wi) => {
+        word.split('').forEach(ch => {
+            const span = document.createElement('span')
+            span.className = 'letter'
+            span.textContent = ch
+            title.appendChild(span)
+        })
+
+        if (wi === 0) {
+            // After first name: mobile line break + desktop space
+            const br = document.createElement('br')
+            br.className = 'mobile-break'
+            title.appendChild(br)
+
+            const space = document.createElement('span')
+            space.className = 'letter desktop-space'
+            space.textContent = '\u00A0'
+            title.appendChild(space)
+        } else if (wi < words.length - 1) {
+            const space = document.createElement('span')
+            space.className = 'letter'
+            space.textContent = '\u00A0'
+            title.appendChild(space)
+        }
     })
 }
 

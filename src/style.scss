@@ -122,6 +122,14 @@ h1 {
     will-change: transform, opacity;
   }
 
+  /* Mobile: break after first name, hide desktop space */
+  .mobile-break { display: none; }
+
+  @media (max-width: 600px) {
+    .mobile-break { display: block; }
+    .desktop-space { display: none; }
+  }
+
   /* Bloom glow behind the title — driven by --title-glow from JS */
   &::after {
     content: attr(data-text);
