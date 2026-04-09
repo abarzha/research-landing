@@ -3,9 +3,10 @@
   "configurations": [
     {
       "name": "research-landing",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev", "--", "--port", "5174"],
-      "port": 5174
+      "runtimeExecutable": "node_modules/.bin/vite",
+      "runtimeArgs": ["--port", "5175"],
+      "port": 5175,
+      "env": { "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin" }
     }
   ]
 }
