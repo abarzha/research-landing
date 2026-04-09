@@ -207,6 +207,108 @@ h1 {
   50%      { transform: translateY(10px); }
 }
 
+/* ─── Research Interests section ────────────────────────── */
+.interests-section {
+  padding-bottom: 5rem;
+}
+
+.interests-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.interest-item {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, 10rem) 1fr;
+  gap: 2.5rem;
+  padding: 2.5rem 0;
+  position: relative;
+  cursor: default;
+  overflow: hidden;
+
+  /* Gradient top border — drawn left→right when .revealed is added by JS */
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(
+      to right,
+      var(--accent) 0%,
+      var(--accent2) 60%,
+      transparent 100%
+    );
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &.revealed::before {
+    transform: scaleX(1);
+  }
+
+  &:hover::before {
+    filter: brightness(1.4);
+  }
+}
+
+/* Ghost outline number */
+.interest-num {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(126, 184, 255, 0.22);
+  align-self: flex-start;
+  padding-top: 0.1em;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+  transition: -webkit-text-stroke-color 0.4s ease;
+
+  .interest-item:hover & {
+    -webkit-text-stroke-color: rgba(126, 184, 255, 0.6);
+  }
+}
+
+.interest-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding-top: 0.25rem;
+
+  h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.05rem, 2.2vw, 1.4rem);
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.25;
+    transition: color 0.3s ease;
+  }
+
+  p {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    max-width: 58ch;
+  }
+
+  .interest-item:hover & h3 {
+    color: var(--accent);
+  }
+}
+
+@media (max-width: 600px) {
+  .interest-item {
+    grid-template-columns: 3rem 1fr;
+    gap: 1rem;
+    padding: 2rem 0;
+  }
+}
+
 /* ─── Projects section ──────────────────────────────── */
 .projects-section {
   flex: 1;
@@ -251,6 +353,45 @@ h1 {
     box-shadow 0.3s ease,
     border-color 0.3s ease,
     background 0.3s ease;
+}
+
+/* ─── Card figure (paper image thumbnail) ───────────── */
+.card-figure {
+  width: calc(100% + 3.5rem);
+  margin: -1.75rem -1.75rem 0.4rem;
+  height: 170px;
+  overflow: hidden;
+  border-radius: 17px 17px 0 0;
+  position: relative;
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    opacity: 0.82;
+    filter: saturate(0.88) brightness(0.88);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.05) 0%,
+      rgba(10, 10, 20, 0.55) 100%
+    );
+    pointer-events: none;
+  }
+}
+
+.project-card:hover .card-figure img {
+  opacity: 0.92;
+  filter: saturate(1) brightness(0.92);
 }
 
 .card-tag {

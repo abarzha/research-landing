@@ -14,6 +14,7 @@ export function initAnimations() {
             applyLetterGradients()
             runHeroTimeline()
             initScrollReveal()
+            initInterests()
             initMagneticCards()
             initFloatingParticles()
         })
@@ -161,14 +162,14 @@ function runHeroTimeline() {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  2. SCROLL-TRIGGERED REVEALS — cards + section title
+//  2. SCROLL-TRIGGERED REVEALS — cards + section titles
 // ═══════════════════════════════════════════════════════════
 function initScrollReveal() {
     const cards = document.querySelectorAll('.project-card')
-    const sectionTitle = document.querySelector('.section-title')
+    const sectionTitles = document.querySelectorAll('.section-title')
 
-    // Section title: slide from left with accent underline
-    if (sectionTitle) {
+    // All section titles: slide from left on scroll into view
+    sectionTitles.forEach(sectionTitle => {
         sectionTitle.style.opacity = '0'
         sectionTitle.style.transform = 'translateX(-40px)'
 
@@ -187,7 +188,7 @@ function initScrollReveal() {
             })
         }, { threshold: 0.3 })
         obs.observe(sectionTitle)
-    }
+    })
 
     // Cards: spring physics entrance with stagger
     // Set initial hidden state
@@ -227,7 +228,79 @@ function initScrollReveal() {
 }
 
 // ═══════════════════════════════════════════════════════════
-//  3. MAGNETIC 3D CARD TILT — cards tilt toward cursor
+//  3. RESEARCH INTERESTS — editorial list with counters
+// ═══════════════════════════════════════════════════════════
+function initInterests() {
+    const items = document.querySelectorAll('.interest-item')
+    if (!items.length) return
+
+    // Set initial hidden state: number faded, body offset
+    items.forEach((item, i) => {
+        const num = item.querySelector('.interest-num')
+        const body = item.querySelector('.interest-body')
+        const isEven = i % 2 === 1
+
+        num.style.opacity = '0'
+        body.style.opacity = '0'
+        // Alternate direction: odd items from left, even from right
+        body.style.transform = isEven ? 'translateX(40px)' : 'translateX(-40px)'
+    })
+
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return
+            const item = entry.target
+            const num = item.querySelector('.interest-num')
+            const body = item.querySelector('.interest-body')
+            const targetVal = parseInt(item.dataset.num, 10)
+            const isEven = [...items].indexOf(item) % 2 === 1
+
+            // 1. Trigger the CSS border draw
+            item.classList.add('revealed')
+
+            // 2. Counter: count up from 0 to target number
+            const counter = { val: 0 }
+            anime({
+                targets: counter,
+                val: targetVal,
+                duration: 900,
+                delay: 150,
+                easing: 'easeOutQuart',
+                round: 1,
+                update: () => {
+                    num.textContent = String(Math.round(counter.val)).padStart(2, '0')
+                },
+            })
+
+            // 3. Number fade in
+            anime({
+                targets: num,
+                opacity: [0, 1],
+                duration: 600,
+                delay: 100,
+                easing: 'easeOutQuad',
+            })
+
+            // 4. Body slides in from alternating direction
+            anime({
+                targets: body,
+                opacity: [0, 1],
+                translateX: [isEven ? 40 : -40, 0],
+                duration: 800,
+                delay: 250,
+                easing: 'easeOutExpo',
+                complete: () => { body.style.transform = '' }
+            })
+
+            obs.unobserve(item)
+        })
+    }, { threshold: 0.25 })
+
+    items.forEach(item => obs.observe(item))
+}
+
+// ═══════════════════════════════════════════════════════════
+//  4. MAGNETIC 3D CARD TILT — cards tilt toward cursor
 // ═══════════════════════════════════════════════════════════
 function initMagneticCards() {
     const cards = document.querySelectorAll('.project-card')
